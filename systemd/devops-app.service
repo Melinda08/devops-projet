@@ -1,0 +1,12 @@
+[Unit]
+Description=Application DevOps personnelle
+After=network.target
+
+[Service]
+User=melinda
+WorkingDirectory=/home/melinda/projets/devops-projet/app
+ExecStart=/usr/bin/python3 /home/melinda/projets/devops-projet/app/app.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
