@@ -86,3 +86,8 @@ Prochaines étapes :
 - Mettre en place une pipeline CI/CD avec GitHub Actions
 - Améliorer la supervision et la gestion de l'application
 ----------------------------------------------------------
+
+### Script de vérification
+- Création script bash d'automatisation, de vérification de disponibilité de l'application :
+scripts/verifier_application.sh
+- Ajout d'une permission d'execution sur le fichier : chmod +x scripts/verifier_application.sh
