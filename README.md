@@ -89,5 +89,6 @@ Prochaines étapes :
 
 ### Script de vérification
 - Création script bash d'automatisation, de vérification de disponibilité de l'application :
-scripts/verifier_application.sh
+scripts/verifier_application.sh    (test du port 8080 avec curl)
 - Ajout d'une permission d'execution sur le fichier : chmod +x scripts/verifier_application.sh
+- Ajout d'un (test de systemd) dans le script : systemctl is-active --quiet devops-app
