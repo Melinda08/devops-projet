@@ -1,0 +1,11 @@
+services:
+   app:
+    image: devops-app
+    ports:
+      - "8081:8080"
+    volumes:
+      - devops-data:/data
+ 
+volumes:
+    devops-data:
+
