@@ -92,3 +92,26 @@ Prochaines étapes :
 scripts/verifier_application.sh    (test du port 8080 avec curl)
 - Ajout d'une permission d'execution sur le fichier : chmod +x scripts/verifier_application.sh
 - Ajout d'un (test de systemd) dans le script : systemctl is-active --quiet devops-app
+
+### Conteneurisation avec Docker
+- Création d'un Dockerfile afin de construire une image Docker de l'application.
+- Construction de l'image avec : docker build -t devops-app .
+- Création et lancement d'un conteneur avec : docker run -d --name devops-app-container -p 8081:8080 devops-app
+- Vérification du conteneur avec : docker ps
+- Test de l'application avec : curl http://localhost:8081
+--> Réponse obtenue : Bonjour depuis mon application DevOps !
+
+### Persistance des données avec Docker Volumes
+- Création d'un volume Docker : docker volume create devops-data
+- Montage du volume dans un conteneur avec : -v devops-data:/data
+- Test de persistance des données après suppression du conteneur.
+--> Le fichier test.txt reste disponible après la suppression du conteneur.
+
+### Gestion avec Docker Compose
+- Création du fichier docker-compose.yml afin de centraliser la configuration du conteneur.
+- Configuration du port 8081:8080 et du volume devops-data.
+- Vérification de la configuration avec : docker compose config
+- Démarrage de l'application avec : docker compose up -d
+- Vérification avec : docker compose ps
+- Test HTTP avec : curl http://localhost:8081
+--> Réponse obtenue : Bonjour depuis mon application DevOps !
