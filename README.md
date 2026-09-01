@@ -183,3 +183,13 @@ Le problème provenait des permissions de l'utilisateur exécutant le runner.
 Après correction des permissions Docker, une nouvelle exécution de la pipeline a été effectuée.
 --> Job test completed with result: Succeeded
 La CI fonctionne donc actuellement sur la VM Ubuntu via le Self-Hosted Runner.
+
+#### Fiabilisation de la CI
+(Lors des premières exécutions de la pipeline sur le Self-Hosted Runner, un conflit a été rencontré lorsqu'un ancien conteneur de test existait déjà sur la VM.) : Conflict. The container name "/devops-app-test" is already in use
+- Etape de nettoyage automatique ajoutée avant le lancement du conteneur : docker rm -f devops-app-test || true
+--> Si un ancien conteneur existe, il est supprimé avant la création du nouveau.
+--> Si aucun conteneur n'existe, la pipeline continue malgré l'erreur grâce à || true.
+
+##### Validation finale de la CI
+(La CI est désormais fonctionnelle et peut être exécutée après chaque git push sur la branche main.)
+----> Le git push déclenche la pipeline, qui vérifie automatiquement que l'application peut être construite, démarrée et testée correctement sur la VM Ubuntu via le Self-Hosted Runner.
