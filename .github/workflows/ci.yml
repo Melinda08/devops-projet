@@ -21,6 +21,9 @@ jobs:
      - name: Démarrer le conteneur
        run: docker run -d --name devops-app-test -p 8081:8080 devops-app
 
+     - name: Vérifier que le conteneur tourne
+       run: docker ps -a
+
      - name: Voir les logs du conteneur
        run: docker logs devops-app-test
 
