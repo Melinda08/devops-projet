@@ -22,6 +22,9 @@ jobs:
      - name: Construire l'image Docker
        run: docker build -t devops-app .
 
+     - name: Nettoyer l'ancien conteneur
+       run: docker rm -f devops-app-test || true
+
      - name: Démarrer le conteneur
        run: docker run -d --name devops-app-test -p 8081:8080 devops-app
 
