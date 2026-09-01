@@ -130,3 +130,56 @@ scripts/verifier_application.sh    (test du port 8080 avec curl)
 
 --> La pipeline CI permet ainsi de vérifier automatiquement que l'application Dockerisée fonctionne correctement après chaque modification envoyée sur GitHub.
 --> Execution de la pipeline : réussie.
+
+### Mise en place d'une VM Ubuntu Server
+---> Afin de se rapprocher d'un environnement d'administration système réel, une machine virtuelle Ubuntu Server a été mise en place avec VirtualBox.
+--> Cette VM sert notamment à héberger le runner utilisé par GitHub Actions.
+
+Installation d'Ubuntu Server.
+Installation et vérification de Git.
+Installation de curl.
+Installation et configuration de Docker.
+Installation de Docker Compose.
+
+- Vérification de Docker : docker --version
+- Vérification de Docker Compose : docker compose version
+
+# Mise en place d'un Self-Hosted Runner
+--> Un runner GitHub Actions a été installé directement sur la VM Ubuntu Server.
+Répertoire utilisé : ~/actions-runner
+--> Le runner permet à GitHub Actions d'exécuter les différentes étapes de la pipeline directement sur la VM personnelle plutôt que sur une machine virtuelle fournie par GitHub.
+
+- Configuration du runner avec le dépôt GitHub : https://github.com/Melinda08/devops-projet
+- Lancement du runner : ./run.sh
+--> Le runner se connecte à GitHub et reste en attente des jobs.
+- Exécution de la CI sur le Self-Hosted Runner
+Le workflow GitHub Actions a été configuré avec : runs-on: self-hosted
+--> La pipeline exécute donc désormais les commandes directement sur la VM Ubuntu.
+
+* Architecture actuelle *
+        Git push
+           ↓
+         GitHub
+           ↓
+     GitHub Actions
+           ↓
+    Self-Hosted Runner
+           ↓
+     VM Ubuntu Server
+           ↓
+        Docker
+           ↓
+  Tests de l'application
+
+### Gestion des permissions Docker
+-> Lors de la première exécution de la CI sur le self-hosted runner, une erreur de permission a été rencontrée lors de l'accès à Docker : permission denied while trying to connect to the Docker API
+Le problème provenait des permissions de l'utilisateur exécutant le runner.
+- L'utilisateur a été ajouté au groupe Docker : sudo usermod -aG docker $USER
+- Puis le nouveau groupe a été pris en compte avec : newgrp docker
+- Vérification : docker ps
+--> Docker est désormais utilisable sans sudo par l'utilisateur exécutant le runner.
+
+### Validation de la CI
+Après correction des permissions Docker, une nouvelle exécution de la pipeline a été effectuée.
+--> Job test completed with result: Succeeded
+La CI fonctionne donc actuellement sur la VM Ubuntu via le Self-Hosted Runner.
