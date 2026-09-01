@@ -115,3 +115,18 @@ scripts/verifier_application.sh    (test du port 8080 avec curl)
 - Vérification avec : docker compose ps
 - Test HTTP avec : curl http://localhost:8081
 --> Réponse obtenue : Bonjour depuis mon application DevOps !
+
+###### Mise en place de la CI avec GitHub Actions
+- Création du workflow : .github/workflows/ci.yml (pour automatiser les vérifications du projet).
+--> La pipeline est déclenchée automatiquement lors d'un git push sur la branche main.
+--> Utilisation d'une machine virtuelle Ubuntu fournie par GitHub Actions.
+--> Récupération du code source avec actions/checkout.
+--> Construction automatique de l'image Docker avec : docker build -t devops-app .
+--> Démarrage automatique d'un conteneur Docker pour tester l'application.
+--> Vérification de l'état du conteneur avec : docker ps -a
+--> Attente du démarrage de l'application avant les tests avec : sleep 3 (Je n'avais pas ajouté cette étape avant, mais j'ai eu une erreur lors du test sur GitHub, car l'application se lancait trop tard alors que le conteneur était déjà en train de tourner donc il n'a pas considéré l'application)
+--> Test HTTP avec : curl http://localhost:8081
+--> Vérification automatique du contenu de la réponse retournée par l'application.
+
+--> La pipeline CI permet ainsi de vérifier automatiquement que l'application Dockerisée fonctionne correctement après chaque modification envoyée sur GitHub.
+--> Execution de la pipeline : réussie.
