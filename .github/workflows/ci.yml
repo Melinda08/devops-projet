@@ -27,6 +27,9 @@ jobs:
      - name: Voir les logs du conteneur
        run: docker logs devops-app-test
 
+     - name: Attendre le démarrage de l'application
+       run: sleep 3
+
      - name: Tester l'application
        run: curl http://localhost:8081
 
