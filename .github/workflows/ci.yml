@@ -22,6 +22,15 @@ jobs:
      - name: Construire l'image Docker
        run: docker build -t devops-app .
 
+     - name: Se connecter à GHCR
+       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+     - name: Taguer l'image pour GHCR
+       run: docker tag devops-app ghcr.io/melinda08/devops-projet:latest
+
+     - name: Envoyer l'image vers GHCR
+       run: docker push ghcr.io/melinda08/devops-projet:latest
+
      - name: Nettoyer l'ancien conteneur
        run: docker rm -f devops-app-test || true
 
