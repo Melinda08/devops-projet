@@ -193,3 +193,55 @@ La CI fonctionne donc actuellement sur la VM Ubuntu via le Self-Hosted Runner.
 ##### Validation finale de la CI
 (La CI est désormais fonctionnelle et peut être exécutée après chaque git push sur la branche main.)
 ----> Le git push déclenche la pipeline, qui vérifie automatiquement que l'application peut être construite, démarrée et testée correctement sur la VM Ubuntu via le Self-Hosted Runner.
+
+### Publication de l'image Docker sur GitHub Container Registry (GHCR)
+
+- Ajout de la publication automatique de l'image Docker sur GitHub Container Registry (GHCR).
+- Authentification à GHCR avec le `GITHUB_TOKEN` fourni par GitHub Actions.
+- Tag de l'image : `ghcr.io/melinda08/devops-projet:latest`
+- Publication automatique de l'image avec :
+  `docker push ghcr.io/melinda08/devops-projet:latest`
+
+--> L'image Docker est désormais stockée dans GitHub Container Registry et peut être récupérée depuis la VM Ubuntu.
+
+### Déploiement automatique en production
+
+- Ajout d'une étape de récupération de la nouvelle image depuis GHCR :
+  `docker pull ghcr.io/melinda08/devops-projet:latest`
+- Suppression automatique de l'ancien conteneur de production :
+  `docker rm -f devops-prod || true`
+- Déploiement automatique de la nouvelle version :
+  `docker run -d --name devops-prod -p 8082:8080 ghcr.io/melinda08/devops-projet:latest`
+- Vérification de l'état du conteneur avec : `docker ps`
+- Test HTTP de la production avec : `curl http://localhost:8082`
+- Vérification automatique de la réponse de l'application.
+
+--> Le déploiement est maintenant entièrement automatisé après un `git push` sur la branche `main`.
+
+### Validation finale du CI/CD
+
+Le pipeline réalise désormais automatiquement les étapes suivantes :
+
+`Git push`
+↓
+`GitHub`
+↓
+`GitHub Actions`
+↓
+`Self-Hosted Runner`
+↓
+`Build de l'image Docker`
+↓
+`Tests de l'application`
+↓
+`Publication sur GHCR`
+↓
+`Récupération de l'image`
+↓
+`Déploiement sur la VM Ubuntu`
+↓
+`Test de l'application en production`
+
+--> La pipeline CI/CD a été exécutée avec succès.
+
+--> L'application est automatiquement construite, testée, publiée et déployée sur la VM Ubuntu Server après chaque modification envoyée sur GitHub.
