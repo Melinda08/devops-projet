@@ -54,3 +54,22 @@ jobs:
          reponse=$(curl -s http://localhost:8081)
          test "$reponse" = "Bonjour depuis mon application DevOps !"
 
+     - name: Récupérer la nouvelle image depuis GHCR
+       run: docker pull ghcr.io/melinda08/devops-projet:latest
+
+     - name: Arrêter l'ancien conteneur de production
+       run: docker rm -f devops-prod || true
+
+     - name: Démarrer la nouvelle version en production
+       run: docker run -d --name devops-prod -p 8082:8080 ghcr.io/melinda08/devops-projet:latest
+
+     - name: Attendre le démarrage de la production
+       run: sleep 3
+
+     - name: Tester la production
+       run: curl http://localhost:8082
+
+     - name: Vérifier la réponse de production
+       run: |
+         reponse=$(curl -s http://localhost:8082)
+         test "$reponse" = "Bonjour depuis mon application DevOps !"
